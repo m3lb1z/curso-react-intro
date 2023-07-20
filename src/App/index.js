@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocalStorage } from './useLocalStorage';
+import { TodoProvider } from '../TodoContext';
 import { AppUI } from './AppUI';
 
 // const defaultTodos = [
@@ -14,38 +14,12 @@ import { AppUI } from './AppUI';
 // Limpiar la memoria de local storage con la key TODOS_V1
 // localStorage.removeItem('TODOS_V1');
 
-
 function App() {
 
-  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
-  const [searchValue, setSearchValue] = React.useState('');
-
-  const completedTodos = todos.filter(todo => !!todo.completed).length;
-  const totalTodos = todos.length;
-  const searchedTodos = todos.filter(todo => todo.text.toLowerCase().includes(searchValue.toLowerCase()));
-
-  const completeTodo = (text) => {
-    const newTodos = [...todos];
-    const todoIndex = newTodos.findIndex(todo => todo.text === text);
-    newTodos[todoIndex].completed = true;
-    saveTodos(newTodos);
-  }
-  
-  const deleteTodo = (text) => {
-    const newTodos = [...todos].filter(todo => todo.text !== text);
-    saveTodos(newTodos);
-  }
-
   return (
-    <AppUI
-      completedTodos={completedTodos}
-      totalTodos={totalTodos}
-      searchValue={searchValue}
-      setSearchValue={setSearchValue}
-      searchedTodos={searchedTodos}
-      completeTodo={completeTodo}
-      deleteTodo={deleteTodo}
-      />
+    <TodoProvider>
+      <AppUI />
+    </TodoProvider>
   );
 }
 
